@@ -21,39 +21,20 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="Line" name="line">
+  <widget class="QLabel" name="stock_bg_pic">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>80</y>
-     <width>1901</width>
-     <height>16</height>
+     <x>-76</x>
+     <y>-85</y>
+     <width>2051</width>
+     <height>1171</height>
     </rect>
    </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_5">
-   <property name="geometry">
-    <rect>
-     <x>590</x>
-     <y>30</y>
-     <width>741</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Segoe UI Black</family>
-     <pointsize>28</pointsize>
-     <weight>75</weight>
-     <italic>false</italic>
-     <bold>true</bold>
-    </font>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
    </property>
    <property name="text">
-    <string> STOCK ROOM MANAGEMENT.</string>
+    <string>`</string>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -63,34 +44,19 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>180</y>
-     <width>1921</width>
-     <height>731</height>
+     <y>170</y>
+     <width>1901</width>
+     <height>791</height>
     </rect>
    </property>
-   <property name="font">
-    <font>
-     <family>Segoe UI</family>
-     <pointsize>10</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-     <underline>false</underline>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QTabWidget::tab-bar
-{
-	alignment: center
-}</string>
-   </property>
    <property name="tabPosition">
-    <enum>QTabWidget::South</enum>
+    <enum>QTabWidget::North</enum>
    </property>
    <property name="tabShape">
     <enum>QTabWidget::Triangular</enum>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>4</number>
    </property>
    <property name="tabsClosable">
     <bool>true</bool>
@@ -1080,7 +1046,7 @@
    <property name="geometry">
     <rect>
      <x>1780</x>
-     <y>110</y>
+     <y>100</y>
      <width>121</width>
      <height>51</height>
     </rect>
@@ -1098,11 +1064,33 @@
     <string>Exit</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="part_1">
+   <property name="geometry">
+    <rect>
+     <x>1460</x>
+     <y>100</y>
+     <width>121</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Segoe UI Black</family>
+     <pointsize>10</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+     <underline>true</underline>
+    </font>
+   </property>
+   <property name="text">
+    <string>Home</string>
+   </property>
+  </widget>
   <widget class="QPushButton" name="btn_logout">
    <property name="geometry">
     <rect>
      <x>1620</x>
-     <y>110</y>
+     <y>100</y>
      <width>121</width>
      <height>51</height>
     </rect>
@@ -1120,26 +1108,45 @@
     <string>Log out</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="part_1">
+  <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>1460</x>
-     <y>110</y>
-     <width>121</width>
-     <height>51</height>
+     <x>590</x>
+     <y>20</y>
+     <width>741</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Segoe UI Black</family>
-     <pointsize>10</pointsize>
+     <pointsize>28</pointsize>
      <weight>75</weight>
+     <italic>false</italic>
      <bold>true</bold>
-     <underline>true</underline>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">color: white;</string>
+   </property>
    <property name="text">
-    <string>Home</string>
+    <string> STOCK ROOM MANAGEMENT.</string>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="Line" name="line">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>70</y>
+     <width>1901</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
    </property>
   </widget>
  </widget>
