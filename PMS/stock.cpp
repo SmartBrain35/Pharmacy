@@ -19,29 +19,40 @@ Stock::Stock(QWidget *parent) : QWidget(parent), ui(new Ui::Stock)
     setWindowFlags(Qt::FramelessWindowHint);
 
     //set background color or image
-
+    ui->stock_bg_pic->setPixmap(QPixmap("D:/Projects/AppDev/Pharmacy_2/images/STOCK.jpg"));
 
     //loading stock quantity combox
-    QStringList QStatus_Box = {"quantity type", "Half pack", "Piece", "Pack"};
+    QStringList QStatus_Box = {"--select quantity--", "Half pack", "Piece", "Pack"};
     ui->quantityStatus_Box->addItems(QStatus_Box);
     ui->quantityStatus_Box->setCurrentIndex(0);
 
     //loading stock drug type combox
-    QStringList drugType_Box = {"drug type", "Pain Killer", "Malaria", "Contraceptive", "Infection", "General"};
+    QStringList drugType_Box = {"--drug type--", "Pain Killer", "Malaria", "Contraceptive", "Infection", "General"};
     ui->show_status_comboBox->addItems(drugType_Box);
     ui->show_status_comboBox->setCurrentIndex(0);
+
+
+    //linking css file i.e stock_StyleSheet.css to the login UI
+    QFile beauty_file("D:/Projects/AppDev/Pharmacy_2/stock_StyleSheet.css"); //load the file css file
+    if(beauty_file.open(QIODevice::ReadOnly | QIODevice::Text)) //if open & read successful
+    {
+        QTextStream stream(&beauty_file); //convert to text stream
+        qApp->setStyleSheet(stream.readAll()); //then app invokes it
+    }
+    beauty_file.close(); //close openned css file
 }
 
 Stock::~Stock()
 {
     delete ui;
+    camera->stop(); //stoping camera
 }
 
 
 //close the application
 void Stock::on_btn_exit_clicked()
 {
-    //camera->stop(); //stoping camera
+    camera->stop(); //stoping camera
     qApp->quit();
 }
 
@@ -58,7 +69,7 @@ void Stock::on_btn_logout_clicked()
         close();
     }
 
-    //camera->stop(); //stoping camera
+    camera->stop(); //stoping camera
 
     login->show(); //open it
     login->hideLoginLables();
@@ -194,9 +205,9 @@ void Stock::on_btn_stock_save_clicked()
             recomend = ui->adult_radioButton->text();
         }
 
-        // QDateTime mfg = ui->show_mfg_date->text().toString();
-        // QDateTime expdate = ui->show_expired;
-        // QString description = ui->description_edit->text();
+        QDate mfg = QDate::fromString(ui->show_mfg_date->text(), "yyyy-MM-dd");
+        QDate expdate = QDate::fromString(ui->show_expired->text(), "yyyy-MM-dd");
+        //QString description = ui->description_edit->text();
         // Qimage drugPhoto = ui->item_pic->text();
         QString supplier = ui->show_supplier->text();
         QString contact = ui->show_contact->text();
@@ -213,8 +224,8 @@ void Stock::on_btn_stock_save_clicked()
         stock_query.bindValue("Cost_Price", costprce);
         stock_query.bindValue("Sole_Price", saleprice);
         stock_query.bindValue("User", recomend);
-        //stock_query.bindValue("MFG_date", mfg);
-        //stock_query.bindValue("Exp_date", expdate);
+        stock_query.bindValue("MFG_date", mfg);
+        stock_query.bindValue("Exp_date", expdate);
         //stock_query.bindValue("Description", description);
         //stock_query.bindValue("Photo", drugPhoto);
         stock_query.bindValue("Supplier", supplier);
