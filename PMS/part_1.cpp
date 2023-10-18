@@ -28,7 +28,7 @@ Part_1::Part_1(QWidget *parent) :QWidget(parent), ui(new Ui::Part_1)
 
     //setting visibility for settings_tabs and sales_frame
     ui->my_settings_tabs->setVisible(false);
-    ui->Sales_frame->setVisible(false);
+    ui->my_sales_tabs->setVisible(false);
 
     //starting codes to open and load drug name from drug_list.txt to ui
     QFile file("D:/Projects/AppDev/Pharmacy_2/Drugs/drugs_List.txt");
@@ -50,9 +50,17 @@ Part_1::Part_1(QWidget *parent) :QWidget(parent), ui(new Ui::Part_1)
 
     // loading sales combox values on app startup
     QStringList list_Box = {"Piece", "Half Pack", "pack"};
-
     ui->quantity_statusBox->addItems(list_Box);
     ui->quantity_statusBox->setCurrentIndex(0);
+
+    //linking css file i.e part_1_StyleSheet.css to the login UI
+    QFile beauty_file("D:/Projects/AppDev/Pharmacy_2/part_1_StyleSheet.css"); //load the file css file
+    if(beauty_file.open(QIODevice::ReadOnly | QIODevice::Text)) //if open & read successful
+    {
+        QTextStream stream(&beauty_file); //convert to text stream
+        qApp->setStyleSheet(stream.readAll()); //then app invokes it
+    }
+    beauty_file.close(); //close opened css file
 }
 
 Part_1::~Part_1()
@@ -75,7 +83,7 @@ void Part_1::updateTime()
     std::stringstream ss;
 
     ss<<std::put_time(&local_time, "%F  %T");
-    ui->lbl_time->setText(QString::fromStdString(ss.str()));
+    ui->lbl_time_2->setText(QString::fromStdString(ss.str()));
 }
 
 
@@ -109,7 +117,8 @@ void Part_1::Enable_All_Features_For_Admin()
     ui->btn_Stock->setEnabled(true); //stock button
     ui->btn_settings->setEnabled(true); //settings button
     ui->btn_statistics->setEnabled(true); //statistics button
-    ui->Sales_frame->setHidden(true); //sales_frame
+    ui->my_sales_tabs->setHidden(true); //sales_frame
+    ui->my_settings_tabs->setHidden(true);
 
     ui->btn_save->setEnabled(false); //save button
     ui->btn_delete->setEnabled(false); //delete button
@@ -135,8 +144,18 @@ void Part_1::on_btn_Stock_clicked()
 //handling settings function
 void Part_1::on_btn_settings_clicked()
 {
-    ui->my_settings_tabs->setVisible(true);
-    ui->Sales_frame->setVisible(false);
+    //linking css file i.e settings_StyleSheet.css to the login UI
+    QFile beauty_file("D:/Projects/AppDev/Pharmacy_2/settings_StyleSheet.css"); //load the file css file
+    if(beauty_file.open(QIODevice::ReadOnly | QIODevice::Text)) //if open & read successful
+    {
+        QTextStream stream(&beauty_file); //convert to text stream
+        qApp->setStyleSheet(stream.readAll()); //then app invokes it
+    }
+    beauty_file.close(); //close openned css file
+
+    ui->my_settings_tabs->setVisible(true); //show settings tabs
+    ui->my_sales_tabs->setVisible(false); //display sales tabs
+
 
 }
 
@@ -159,7 +178,8 @@ void Part_1::UpdateSearchDrugOutcome(const QString &text)
     ui->outcome->setPlainText(My_Drugs.join("\n"));
 }
 
-void Part_1::on_btn_add_clicked()
+//add user buttton clicked from settings tap
+void Part_1::on_btn_add_user_clicked()
 {
 
     if(manager.Open_Connection())
@@ -189,7 +209,7 @@ void Part_1::on_btn_add_clicked()
         QString user_phone = ui->show_phone->text();
         QString user_email = ui->show_email->text();
         QString user_password = ui->show_password->text();
-        QString user_address = ui->show_address->text();
+        QString user_address = ui->show_user_address->text();
         QString user_photo = ui->user_photo->text();
         QDateTime Issued_Date = QDateTime::currentDateTime();
 
@@ -235,8 +255,16 @@ void Part_1::on_btn_exit_clicked()
 //search for user by name
 void Part_1::on_btn_search_user_clicked()
 {
+    QSqlQuery searchingQuery(manager.getDatabase());
+    QString username = ui->show_user_seached->text();
+    searchingQuery.prepare("SELECT * FROM ADD_USER WHERE NAME LIKE %':Name'");
+    searchingQuery.bindValue(":Name", username);
 
-    //***********************************************dont forget here
+    if(searchingQuery.exec() && searchingQuery.next())
+    {
+
+    }
+
 }
 
 //browse photo for new user
@@ -261,8 +289,19 @@ void Part_1::on_browse_user_photo_clicked()
 //show sales form for the employee
 void Part_1::on_btn_sales_clicked()
 {
+
+    //linking css file i.e sales_styleSheet.css to the login UI
+    QFile beauty_file("D:/Projects/AppDev/Pharmacy_2/sales_styleSheet.css"); //load the file css file
+    if(beauty_file.open(QIODevice::ReadOnly | QIODevice::Text)) //if open & read successful
+    {
+        QTextStream stream(&beauty_file); //convert to text stream
+        qApp->setStyleSheet(stream.readAll()); //then app invokes it
+    }
+    beauty_file.close(); //close openned css file
+
+
     ui->my_settings_tabs->setVisible(false);
-    ui->Sales_frame->setVisible(true);
+    ui->my_sales_tabs->setVisible(true);
 }
 
 
@@ -279,10 +318,10 @@ void Part_1::on_btn_save_clicked()
     {
         QSqlQuery sales_query(manager.getDatabase());
 
-        QString cust_id = ui->txt_id->text();
-        QString cust_name = ui->txt_name->text();
-        QString cust_phone = ui->txt_phone->text();
-        QString cust_address = ui->txt_address->text();
+        //QString cust_id = ui->txt_id->text();
+        //QString cust_name = ui->txt_name->text();
+        //QString cust_phone = ui->txt_phone->text();
+       // QString cust_address = ui->txt_address->text();
         QString drugCode = ui->txt_batchCode->text();
         QString drugName = ui->drug_name->text();
         QString drugtype = ui-> txt_drugType->currentText();
@@ -302,8 +341,6 @@ void Part_1::on_btn_save_clicked()
         {
             quantity_status = sales_query.value(currentValue).toString();
         }
-
-        int lcd_remain = ui->lcd_remain->value();
         QDate drugDate = QDate::fromString(ui->ex_date->text(), "yyyy-MM-dd");
 
         QString recomend;
@@ -321,7 +358,7 @@ void Part_1::on_btn_save_clicked()
             recomend = ui->female__radiaButton->text();
         }
         QString description = ui->txt_desccribe->text();
-
+        QString drug_pic;
 
         QString payment_method;
         if(ui->Mtn_radioButton->isChecked())
@@ -339,23 +376,27 @@ void Part_1::on_btn_save_clicked()
         {
             payment_method = ui->cash__radioButton->text();
         }
+        QDateTime add_date = QDateTime::currentDateTime();
 
-        sales_query.prepare("CALL MySales (:Cu_Id, :Cu_Name, :Cu_Phone, :Cu_Address)"); //preparing query to insert records i.e insert into table
+        //preparing query to insert records i.e insert into table
+        sales_query.prepare("CALL MySales (:BatchCode, :Name, :Status, :Quantity_Status, :Quantity, :Sole_Price, :User, :Description, :Exp_date, :Photo, :Issued_Date)");
 
-        sales_query.bindValue(":Cu_Id", cust_id);
-        sales_query.bindValue(":Cu_Name", cust_name);
-        sales_query.bindValue(":Cu_Phone", cust_phone);
-        sales_query.bindValue(":Cu_Address", cust_address);
-        sales_query.bindValue("", drugCode);
-        sales_query.bindValue("", drugName);
-        sales_query.bindValue("", drugtype);
-        sales_query.bindValue("", drugquanity);
-        sales_query.bindValue("", drugPrice);
-        sales_query.bindValue("", quantity_status);
-        sales_query.bindValue("", lcd_remain);
-        sales_query.bindValue("", drugDate);
-        sales_query.bindValue("", recomend);
-        sales_query.bindValue("", description);
+        // sales_query.bindValue(":Cu_Id", cust_id);
+        //sales_query.bindValue(":Cu_Name", cust_name);
+        //sales_query.bindValue(":Cu_Phone", cust_phone);
+        //sales_query.bindValue(":Cu_Address", cust_address);
+
+        sales_query.bindValue(":BatchCode", drugCode);
+        sales_query.bindValue(":Name", drugName);
+        sales_query.bindValue(":Status", drugtype);
+        sales_query.bindValue(":Quantity_Status", quantity_status);
+        sales_query.bindValue(":Quantity", drugquanity);
+        sales_query.bindValue(":Sole_Price", drugPrice);
+        sales_query.bindValue(":User", recomend);
+        sales_query.bindValue(":Description", description);
+        sales_query.bindValue(":MFG_date", drugDate);
+        sales_query.bindValue(":Photo", drug_pic);
+        sales_query.bindValue(":Issued_Date", add_date);
         sales_query.bindValue("", payment_method);
 
         if(sales_query.exec() && sales_query.next())
@@ -380,9 +421,4 @@ void Part_1::on_btn_save_clicked()
     manager.Close_Database();//close database connection
 }
 
-
-void Part_1::on_my_settings_tabs_currentChanged(int index)
-{
-
-}
 
