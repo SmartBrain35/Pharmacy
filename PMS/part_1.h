@@ -45,7 +45,7 @@ private slots:
 
     void on_btn_settings_clicked();
 
-    void on_btn_add_clicked();
+    void on_btn_add_user_clicked();
 
     void on_btn_search_user_clicked();
 
@@ -56,8 +56,6 @@ private slots:
     void on_btn_browse_logo_clicked();
 
     void on_btn_save_clicked();
-
-    void on_my_settings_tabs_currentChanged(int index);
 
 public Q_SLOT:   //function declarations
     void updateTime();//slot to update time
